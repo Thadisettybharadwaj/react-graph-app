@@ -85,6 +85,35 @@ const DagGraph2D: React.FC<{}> = () => {
     }
   }, []);
 
+  const nodeCanvasObject = (
+    node: NodeObject<DagGraphNodeType>,
+    ctx: CanvasRenderingContext2D,
+    globalScale: number
+  ) => {
+    const label = node.leaf || node.path;
+    const fontSize = 12 / globalScale;
+    ctx.font = `${fontSize}px Sans-Serif`;
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const nodeX = node.x ?? 0;
+    const nodeY = node.y ?? 0;
+
+    // Calculate the angle based on the node's connections
+    const link = graph.links.find((l) => l.target === node.path);
+    if (link) {
+      const angle = Math.atan2(nodeY, nodeX);
+      ctx.save();
+      ctx.translate(nodeX, nodeY);
+      ctx.rotate(angle);
+      ctx.fillText(label, 0, 0);
+      ctx.restore();
+    } else {
+      ctx.fillText(label, nodeX, nodeY);
+    }
+  };
+
   return (
     <div>
       <ForceGraph
@@ -97,7 +126,12 @@ const DagGraph2D: React.FC<{}> = () => {
         /////////////
         ////// links //////////
         linkColor={() => "rgba(255,255,255,0.2)"}
-        linkLabel={(link) => link.targetNode.path}
+        linkLabel={(link) => link.targetNode.path} // onLinkHover, this label will be appeared
+        linkDirectionalParticles={6} // how many dots should be there in the link
+        linkDirectionalParticleWidth={6} // dots width
+        linkDirectionalParticleSpeed={0.00001} // dots speed in the link
+        linkDirectionalArrowLength={10} // arrow length
+        linkDirectionalArrowColor={() => "#fff"} // arrow color
         /////////
         ////////// nodes ///////////
         nodeRelSize={1}
@@ -105,6 +139,8 @@ const DagGraph2D: React.FC<{}> = () => {
         nodeVal={(node) => 100 / (node.level + 1)} // for changing node size
         nodeLabel={(node) => getTableOnNodeHover(node).toString()}
         nodeAutoColorBy={(node) => node.__indexColor}
+        nodeCanvasObjectMode={() => "after"}
+        nodeCanvasObject={nodeCanvasObject}
       />
     </div>
   );
