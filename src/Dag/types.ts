@@ -14,6 +14,7 @@ export type DagGraphNodeType = {
   module: string | null;
   size: number;
   level: number;
+  NodeColor: string;
   Links: DagGraphLinkType[];
   Neighbors: DagGraphNodeType[];
 };
@@ -21,4 +22,16 @@ export type DagGraphNodeType = {
 export type DagGraphDataType = {
   nodes: DagGraphNodeType[];
   links: DagGraphLinkType[];
+};
+
+export type ContextMenuType = {
+  visible: boolean;
+  x: number;
+  y: number;
+  node: NodeObject<DagGraphNodeType>;
+};
+
+export type NodeColor = {
+  id: number;
+  color: string;
 };
