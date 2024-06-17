@@ -4,31 +4,21 @@ import ForceGraph, {
   type LinkObject,
   type NodeObject,
 } from "react-force-graph-2d";
+import { dagData } from "../data/Data";
 import type {
+  ContextMenuType,
   DagGraphDataType,
   DagGraphLinkType,
   DagGraphNodeType,
 } from "../types";
-import { dagData } from "../data/Data";
+import { getNodeColor } from "../utils/GetNodeColor";
 import { getTableOnNodeHover } from "./GetTableOnHover";
-
-const initialNode: DagGraphNodeType = {
-  id: 0,
-  leaf: "",
-  level: 1,
-  module: "",
-  size: 0,
-  path: "",
-  Links: [],
-  Neighbors: [],
-};
-
-const initialLink: DagGraphLinkType = {
-  source: "",
-  target: "",
-  sourceNode: initialNode,
-  targetNode: initialNode,
-};
+import {
+  initialContextMenu,
+  initialLink,
+  initialNode,
+} from "../data/InitialData";
+import InspectComponent from "./InspectComponent";
 
 const DagGraph2D: React.FC<{}> = () => {
   /** Optional Ref, to access additional functions of lib */
@@ -45,6 +35,25 @@ const DagGraph2D: React.FC<{}> = () => {
     nodes: [initialNode],
     links: [initialLink],
   });
+  const [contextMenu, setContextMenu] =
+    useState<ContextMenuType>(initialContextMenu);
+
+  const closeContextMenu = () => {
+    setContextMenu(initialContextMenu);
+  };
+
+  const handleNodeRightClick = (
+    node: NodeObject<DagGraphNodeType>,
+    event: MouseEvent
+  ) => {
+    event.preventDefault();
+    setContextMenu({
+      visible: true,
+      x: event.clientX,
+      y: event.clientY,
+      node,
+    });
+  };
 
   useEffect(() => {
     const nodes: DagGraphNodeType[] = [],
@@ -65,6 +74,7 @@ const DagGraph2D: React.FC<{}> = () => {
         module,
         size: each.size || 20,
         level,
+        NodeColor: getNodeColor(i),
         Links: [],
         Neighbors: [],
       };
@@ -138,10 +148,26 @@ const DagGraph2D: React.FC<{}> = () => {
         nodeId="path"
         nodeVal={(node) => 100 / (node.level + 1)} // for changing node size
         nodeLabel={(node) => getTableOnNodeHover(node).toString()}
-        nodeAutoColorBy={(node) => node.__indexColor}
+        nodeColor={(node) => node.NodeColor}
         nodeCanvasObjectMode={() => "after"}
         nodeCanvasObject={nodeCanvasObject}
+        onNodeRightClick={handleNodeRightClick}
       />
+      {contextMenu.visible && (
+        <div
+          style={{
+            position: "absolute",
+            top: contextMenu.y,
+            left: contextMenu.x,
+            borderRadius: "12px",
+            padding: "4px",
+            zIndex: 1000,
+          }}
+          onClick={closeContextMenu}
+        >
+          <InspectComponent node={contextMenu.node} />
+        </div>
+      )}
     </div>
   );
 };
