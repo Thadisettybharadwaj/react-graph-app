@@ -1,26 +1,25 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "experimentalDecorators": true,
+    "importHelpers": false /* Import emit helpers from 'tslib'. */,
+    "jsx": "react",
+    "lib": ["DOM", "DOM.Iterable", "esnext"],
+    "module": "ESNext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "paths": {},
+    "rootDir": ".",
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true /* Skip type checking of declaration files. */,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "target": "ESNext",
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types", "./node_modules/@dynatrace"]
   },
-  "include": [
-    "src"
-  ]
+  "exclude": ["node_modules", "dist", "actions"]
 }

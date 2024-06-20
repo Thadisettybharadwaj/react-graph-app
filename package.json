@@ -1,45 +1,52 @@
 {
-  "name": "react-dag-graph-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.98",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@types/three": "^0.165.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-force-graph-2d": "^1.25.5",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
-  },
+  "name": "react-dag-graph",
+  "version": "0.0.0",
+  "description": "An empty project",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "dt-app build --prod",
+    "start": "dt-app dev",
+    "generate:function": "dt-app generate function",
+    "generate:action": "dt-app generate action",
+    "uninstall": "dt-app uninstall",
+    "deploy": "dt-app deploy",
+    "update": "dt-app update",
+    "info": "dt-app info",
+    "help": "dt-app help",
+    "lint": "eslint ."
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "engines": {
+    "node": ">=16.13.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dynatrace-sdk/app-environment": "^1.1.0",
+    "@dynatrace-sdk/client-query": "^1.11.1",
+    "@dynatrace-sdk/error-handlers": "^1.3.1",
+    "@dynatrace-sdk/navigation": "^1.0.2",
+    "@dynatrace-sdk/react-hooks": "~0.4.3",
+    "@dynatrace-sdk/user-preferences": "^1.1.1",
+    "@dynatrace/strato-components": "~0.84.11",
+    "@dynatrace/strato-components-preview": "~0.114.1",
+    "@dynatrace/strato-icons": "~0.37.0",
+    "@types/three": "^0.165.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-force-graph-2d": "^1.25.5",
+    "react-intl": "6.6.2",
+    "react-router-dom": "^6.22.2"
+  },
+  "devDependencies": {
+    "@microsoft/eslint-plugin-sdl": "^0.2.0",
+    "@types/node": "^16.11.34",
+    "@types/react": "^18.2.63",
+    "@types/react-dom": "^18.2.20",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
+    "dt-app": "0.121.0",
+    "eslint": "^8.15.0",
+    "eslint-plugin-no-secrets": "^0.8.9",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "environmentUrl": "https://cer89933.apps.dynatrace.com/ui/",
+  "app": {
+    "name": "react-dag-graph",
+    "version": "0.0.0",
+    "description": "An empty project",
+    "id": "my.react.dag.graph",
+    "scopes": [{ "name": "storage:logs:read", "comment": "default template" }, { "name": "storage:buckets:read", "comment": "default template" }]
+  }
+}
