@@ -35,3 +35,6 @@ export type NodeColor = {
   id: number;
   color: string;
 };
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type AppCompProps = {};
