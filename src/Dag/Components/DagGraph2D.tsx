@@ -6,6 +6,7 @@ import ForceGraph, {
 } from "react-force-graph-2d";
 import { dagData } from "../data/Data";
 import type {
+  AppCompProps,
   ContextMenuType,
   DagGraphDataType,
   DagGraphLinkType,
@@ -20,7 +21,7 @@ import {
 } from "../data/InitialData";
 import InspectComponent from "./InspectComponent";
 
-const DagGraph2D: React.FC<{}> = () => {
+const DagGraph2D: React.FC<AppCompProps> = () => {
   /** Optional Ref, to access additional functions of lib */
   const ref =
     useRef<
@@ -123,7 +124,6 @@ const DagGraph2D: React.FC<{}> = () => {
       ctx.fillText(label, nodeX, nodeY);
     }
   };
-
   return (
     <div>
       <ForceGraph
@@ -133,6 +133,10 @@ const DagGraph2D: React.FC<{}> = () => {
         dagLevelDistance={300}
         backgroundColor="#101020"
         autoPauseRedraw={false}
+        d3AlphaDecay={0.08} // Speed up the cooling of the simulation
+        d3VelocityDecay={0.9} // Reduce the impact of the forces
+        cooldownTicks={50} // Number of ticks to run the simulation
+        onEngineStop={() => ref.current?.zoomToFit(400, 100)}
         /////////////
         ////// links //////////
         linkColor={() => "rgba(255,255,255,0.2)"}
