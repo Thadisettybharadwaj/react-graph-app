@@ -1,10 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
+import { renderToString } from "react-dom/server";
 import ForceGraph, {
   type ForceGraphMethods,
   type LinkObject,
   type NodeObject,
 } from "react-force-graph-2d";
 import { dagData } from "../data/Data";
+import {
+  initialContextMenu,
+  initialLink,
+  initialNode,
+} from "../data/InitialData";
 import type {
   AppCompProps,
   ContextMenuType,
@@ -13,12 +19,7 @@ import type {
   DagGraphNodeType,
 } from "../types";
 import { getNodeColor } from "../utils/GetNodeColor";
-import { getTableOnNodeHover } from "./GetTableOnHover";
-import {
-  initialContextMenu,
-  initialLink,
-  initialNode,
-} from "../data/InitialData";
+import { GetTableOnNodeHover } from "./GetTableOnHover";
 import InspectComponent from "./InspectComponent";
 
 const DagGraph2D: React.FC<AppCompProps> = () => {
@@ -148,10 +149,14 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
         linkDirectionalArrowColor={() => "#fff"} // arrow color
         /////////
         ////////// nodes ///////////
-        nodeRelSize={1}
+        nodeRelSize={1.5}
         nodeId="path"
         nodeVal={(node) => 100 / (node.level + 1)} // for changing node size
-        nodeLabel={(node) => getTableOnNodeHover(node).toString()}
+        nodeLabel={(node) => {
+          return contextMenu.visible
+            ? ""
+            : renderToString(<GetTableOnNodeHover data={node} />);
+        }}
         nodeColor={(node) => node.NodeColor}
         nodeCanvasObjectMode={() => "after"}
         nodeCanvasObject={nodeCanvasObject}
