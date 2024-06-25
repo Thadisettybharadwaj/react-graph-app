@@ -5,6 +5,23 @@
     "version": "0.0.0",
     "description": "An empty project",
     "id": "my.react.dag.graph",
-    "scopes": [{ "name": "storage:logs:read", "comment": "default template" }, { "name": "storage:buckets:read", "comment": "default template" }]
+    "scopes": [
+      { "name": "storage:logs:read", "comment": "default template" },
+      { "name": "storage:buckets:read", "comment": "default template" }
+    ],
+    "csp": {
+      "img-src": [
+        {
+          "value": "https://i.imgur.com/5vyqEdE.png",
+          "comment": "allows to load images from awesome CDN"
+        }
+      ],
+      "font-src": [
+        {
+          "value": "https://font-paradise.com",
+          "comment": "allows to load fonts from font paradise"
+        }
+      ]
+    }
   }
 }

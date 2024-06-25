@@ -17,67 +17,83 @@ const Parse = `${Constant}-Parse`;
 export const dagData: {
   size: number;
   path: string;
+  pic: boolean;
 }[] = [
   //////////////// Initializing ///////
   {
     size: 99,
     path: `${Constant}`,
+    pic: false,
   },
   {
     size: 113,
     path: `${Constant}/${Zoom}`,
+    pic: false,
   },
   {
     size: 656,
     path: `${Constant}/${Timer}`,
+    pic: true,
   },
   {
     size: 1236,
     path: `${Constant}/${Geo}`,
+    pic: false,
   },
   {
     size: 187,
     path: `${Constant}/${Array}`,
+    pic: true,
   },
   {
     size: 257,
     path: `${Constant}/${Scale}`,
+    pic: false,
   },
   {
     size: 770,
     path: `${Constant}/${Queue}`,
+    pic: true,
   },
   {
     size: 177,
     path: `${Constant}/${Ease}`,
+    pic: false,
   },
   {
     size: 887,
     path: `${Constant}/${Force}`,
+    pic: false,
   },
   {
     size: 117,
     path: `${Constant}/${Polygon}`,
+    pic: true,
   },
   {
     size: 987,
     path: `${Constant}/${Chord}`,
+    pic: true,
   },
   {
     size: 187,
     path: `${Constant}/${Drag}`,
+    pic: true,
   },
   {
     size: 1287,
     path: `${Constant}/${Parse}`,
+    pic: true,
   },
   {
     size: 267,
     path: `${Constant}/${Path}`,
+    pic: false,
   },
   {
     size: 881,
     path: `${Constant}/${Axis}`,
+    pic: true,
   },
   // {
   //   size: 454,

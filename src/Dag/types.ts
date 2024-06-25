@@ -17,6 +17,7 @@ export type DagGraphNodeType = {
   NodeColor: string;
   Links: DagGraphLinkType[];
   Neighbors: DagGraphNodeType[];
+  icon: string;
 };
 
 export type DagGraphDataType = {
