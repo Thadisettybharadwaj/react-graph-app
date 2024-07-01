@@ -1,19 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
-import ForceGraph2D, {
-  ForceGraphMethods,
-  LinkObject,
-  NodeObject,
+import { renderToString } from "react-dom/server";
+import ForceGraph, {
+  type ForceGraphMethods,
+  type LinkObject,
+  type NodeObject,
 } from "react-force-graph-2d";
 import { dagData } from "../data/Data";
-import { getNodeColor } from "../utils/GetNodeColor";
-import { getTableOnNodeHover } from "./GetTableOnHover";
 import {
   initialContextMenu,
   initialLink,
   initialNode,
 } from "../data/InitialData";
+import type {
+  AppCompProps,
+  ContextMenuType,
+  DagGraphDataType,
+  DagGraphLinkType,
+  DagGraphNodeType,
+} from "../types";
+import { getNodeColor } from "../utils/GetNodeColor";
+import { GetTableOnNodeHover } from "./GetTableOnHover";
 import InspectComponent from "./InspectComponent";
-import { DagGraphLinkType, DagGraphNodeType } from "../types";
 // import { syncLoadAllImages } from "../utils/ImageLoader";
 import { AccountExperienceSignetIcon } from "@dynatrace/strato-icons";
 
@@ -176,7 +183,7 @@ const DagGraph2D: React.FC = () => {
 
   return (
     <div>
-      <ForceGraph2D
+      <ForceGraph
         ref={ref}
         graphData={graph}
         dagMode={"radialout"}
@@ -188,16 +195,22 @@ const DagGraph2D: React.FC = () => {
         cooldownTicks={50}
         onEngineStop={() => ref.current?.zoomToFit(400, 100)}
         linkColor={() => "rgba(255,255,255,0.2)"}
-        linkLabel={(link) => link.targetNode.path}
-        linkDirectionalParticles={6}
-        linkDirectionalParticleWidth={6}
-        linkDirectionalParticleSpeed={0.00001}
-        linkDirectionalArrowLength={10}
-        linkDirectionalArrowColor={() => "#fff"}
-        nodeRelSize={1}
+        linkLabel={(link) => link.targetNode.path} // onLinkHover, this label will be appeared
+        linkDirectionalParticles={6} // how many dots should be there in the link
+        linkDirectionalParticleWidth={6} // dots width
+        linkDirectionalParticleSpeed={0.00001} // dots speed in the link
+        linkDirectionalArrowLength={10} // arrow length
+        linkDirectionalArrowColor={() => "#fff"} // arrow color
+        /////////
+        ////////// nodes ///////////
+        nodeRelSize={1.5}
         nodeId="path"
-        nodeVal={(node) => 100 / (node.level + 1)}
-        nodeLabel={(node) => getTableOnNodeHover(node).toString()}
+        nodeVal={(node) => 100 / (node.level + 1)} // for changing node size
+        nodeLabel={(node) => {
+          return contextMenu.visible
+            ? ""
+            : renderToString(<GetTableOnNodeHover data={node} />);
+        }}
         nodeColor={(node) => node.NodeColor}
         nodeCanvasObjectMode={() => "after"}
         nodeCanvasObject={nodeCanvasObject}

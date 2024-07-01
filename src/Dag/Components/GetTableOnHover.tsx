@@ -1,17 +1,58 @@
+import {
+  Heading,
+  SimpleTable,
+  SimpleTableColumn,
+  Strong,
+} from "@dynatrace/strato-components-preview";
+import React from "react";
 import type { DagGraphNodeType } from "../types";
 
-export const getTableOnNodeHover = (val: DagGraphNodeType) => {
-  return `<div>
-      <p>Path: ${val.path}</p>
-      <table>
-        <tr>
-          <th>Level</th>
-          <th>Leaf</th>
-        </tr>
-        <tr>
-          <th>${val.level}</th>
-          <th>${val.leaf}</th>
-        </tr>
-      </table>
-    </div>`;
+interface GetTableOnHoverProps {
+  data: DagGraphNodeType;
+}
+
+const tableColumns: SimpleTableColumn[] = [
+  {
+    header: "Level",
+    accessor: "level",
+    alignment: "center",
+  },
+  {
+    header: "Leaf",
+    accessor: "leaf",
+    alignment: "center",
+  },
+  {
+    header: "Path",
+    accessor: "path",
+    alignment: "center",
+  },
+];
+
+export const GetTableOnNodeHover: React.FC<GetTableOnHoverProps> = (props) => {
+  const tableData = [
+    {
+      level: props.data.level,
+      leaf: props.data.leaf,
+      path: props.data.path,
+    },
+  ];
+  return (
+    <>
+      <Heading level={6} as="h6">
+        <Strong>Node Details</Strong>
+      </Heading>
+      <SimpleTable
+        columns={tableColumns}
+        data={tableData}
+        variant={{
+          contained: true,
+          fontStyle: "text",
+          rowDensity: "comfortable",
+          rowSeparation: "zebraStripes",
+          verticalDividers: true,
+        }}
+      />
+    </>
+  );
 };
