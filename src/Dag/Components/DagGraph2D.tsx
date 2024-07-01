@@ -11,18 +11,10 @@ import {
   initialLink,
   initialNode,
 } from "../data/InitialData";
-import type {
-  AppCompProps,
-  ContextMenuType,
-  DagGraphDataType,
-  DagGraphLinkType,
-  DagGraphNodeType,
-} from "../types";
+import type { DagGraphLinkType, DagGraphNodeType } from "../types";
 import { getNodeColor } from "../utils/GetNodeColor";
 import { GetTableOnNodeHover } from "./GetTableOnHover";
 import InspectComponent from "./InspectComponent";
-// import { syncLoadAllImages } from "../utils/ImageLoader";
-import { AccountExperienceSignetIcon } from "@dynatrace/strato-icons";
 
 type ImageMap = Map<number | string, HTMLImageElement>;
 interface ImageQueueItem {
@@ -67,11 +59,11 @@ const syncLoadAllImages = (
 };
 
 const IMAGE_SIZE = 24;
-const NODE_RELSIZE = IMAGE_SIZE;
-const ZOOM = 1.7;
-const FORCE_LINK_DISTANCE = IMAGE_SIZE * 4;
-const FORCE_MANYBODIES_STRENGTH = -(IMAGE_SIZE * 4);
-const FORCE_COLLIDE_RADIUS = NODE_RELSIZE * 1.5;
+// const NODE_RELSIZE = IMAGE_SIZE;
+// const ZOOM = 1.7;
+// const FORCE_LINK_DISTANCE = IMAGE_SIZE * 4;
+// const FORCE_MANYBODIES_STRENGTH = -(IMAGE_SIZE * 4);
+// const FORCE_COLLIDE_RADIUS = NODE_RELSIZE * 1.5;
 
 const DagGraph2D: React.FC = () => {
   const ref =
@@ -125,7 +117,7 @@ const DagGraph2D: React.FC = () => {
         NodeColor: getNodeColor(i),
         Links: [],
         Neighbors: [],
-        icon: each.pic ? "https://i.imgur.com/5vyqEdE.png" : "",
+        icon: each.pic ? "assets/setting.webp" : "",
       };
 
       nodes.push(node);
@@ -231,12 +223,7 @@ const DagGraph2D: React.FC = () => {
           <InspectComponent node={contextMenu.node} />
         </div>
       )}
-      <img
-        alt="sa"
-        src="https://i.imgur.com/5vyqEdE.png"
-        height={200}
-        width={200}
-      />
+      {/* <img alt="sa" src="assets/setting.webp" height={200} width={200} /> */}
     </div>
   );
 };
