@@ -11,19 +11,61 @@ import {
   initialLink,
   initialNode,
 } from "../data/InitialData";
-import type {
-  AppCompProps,
-  ContextMenuType,
-  DagGraphDataType,
-  DagGraphLinkType,
-  DagGraphNodeType,
-} from "../types";
+import type { DagGraphLinkType, DagGraphNodeType } from "../types";
 import { getNodeColor } from "../utils/GetNodeColor";
 import { GetTableOnNodeHover } from "./GetTableOnHover";
 import InspectComponent from "./InspectComponent";
 
-const DagGraph2D: React.FC<AppCompProps> = () => {
-  /** Optional Ref, to access additional functions of lib */
+type ImageMap = Map<number | string, HTMLImageElement>;
+interface ImageQueueItem {
+  id: number | string;
+  image: string;
+}
+
+const syncLoadAllImages = (
+  imageQueue: ImageQueueItem[],
+  callback: (imageMap: ImageMap) => void
+): void => {
+  const numAll = imageQueue.length;
+  let numProcessed = 0;
+  const allImages: ImageMap = new Map();
+
+  if (numAll === 0) {
+    callback(allImages);
+    return;
+  }
+
+  imageQueue.forEach((item) => {
+    const image = new Image();
+    const id = item.id;
+
+    image.addEventListener("load", () => {
+      numProcessed++;
+      allImages.set(id, image);
+      if (numAll === numProcessed) {
+        callback(allImages);
+      }
+    });
+
+    image.addEventListener("error", () => {
+      numProcessed++;
+      if (numAll === numProcessed) {
+        callback(allImages);
+      }
+    });
+
+    image.src = item.image;
+  });
+};
+
+const IMAGE_SIZE = 24;
+// const NODE_RELSIZE = IMAGE_SIZE;
+// const ZOOM = 1.7;
+// const FORCE_LINK_DISTANCE = IMAGE_SIZE * 4;
+// const FORCE_MANYBODIES_STRENGTH = -(IMAGE_SIZE * 4);
+// const FORCE_COLLIDE_RADIUS = NODE_RELSIZE * 1.5;
+
+const DagGraph2D: React.FC = () => {
   const ref =
     useRef<
       ForceGraphMethods<
@@ -31,23 +73,18 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
         LinkObject<DagGraphNodeType, DagGraphLinkType> | undefined
       >
     >();
-
-  /** Dag Graph Data  */
-  const [graph, setGraph] = useState<DagGraphDataType>({
+  const [graph, setGraph] = useState({
     nodes: [initialNode],
     links: [initialLink],
   });
-  const [contextMenu, setContextMenu] =
-    useState<ContextMenuType>(initialContextMenu);
+  const [contextMenu, setContextMenu] = useState(initialContextMenu);
+  const [imageMap, setImageMap] = useState<ImageMap>(new Map());
 
   const closeContextMenu = () => {
     setContextMenu(initialContextMenu);
   };
 
-  const handleNodeRightClick = (
-    node: NodeObject<DagGraphNodeType>,
-    event: MouseEvent
-  ) => {
+  const handleNodeRightClick = (node, event) => {
     event.preventDefault();
     setContextMenu({
       visible: true,
@@ -58,8 +95,10 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
   };
 
   useEffect(() => {
-    const nodes: DagGraphNodeType[] = [],
-      links: DagGraphLinkType[] = [];
+    const nodes: DagGraphNodeType[] = [];
+    const links: DagGraphLinkType[] = [];
+
+    console.log(nodes, "nodesss");
 
     dagData.forEach((each, i) => {
       const levels = each.path.split("/");
@@ -68,7 +107,6 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
       const leaf = levels.pop();
       const parent = levels.join("/");
 
-      ///////
       const node: DagGraphNodeType = {
         id: i,
         path: each.path,
@@ -79,6 +117,7 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
         NodeColor: getNodeColor(i),
         Links: [],
         Neighbors: [],
+        icon: each.pic ? "assets/setting.webp" : "",
       };
 
       nodes.push(node);
@@ -92,16 +131,24 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
         });
       }
     });
+
     if (nodes && links) {
       setGraph({ nodes, links });
+
+      const images: ImageQueueItem[] = nodes.map((e) => ({
+        id: e.id,
+        image: e.icon,
+      }));
+
+      syncLoadAllImages(images, setImageMap);
     }
   }, []);
 
-  const nodeCanvasObject = (
-    node: NodeObject<DagGraphNodeType>,
-    ctx: CanvasRenderingContext2D,
-    globalScale: number
-  ) => {
+  if (!imageMap) {
+    return null; // Or a loading spinner
+  }
+
+  const nodeCanvasObject = (node, ctx, globalScale) => {
     const label = node.leaf || node.path;
     const fontSize = 12 / globalScale;
     ctx.font = `${fontSize}px Sans-Serif`;
@@ -112,19 +159,20 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
     const nodeX = node.x ?? 0;
     const nodeY = node.y ?? 0;
 
-    // Calculate the angle based on the node's connections
-    const link = graph.links.find((l) => l.target === node.path);
-    if (link) {
-      const angle = Math.atan2(nodeY, nodeX);
-      ctx.save();
-      ctx.translate(nodeX, nodeY);
-      ctx.rotate(angle);
-      ctx.fillText(label, 0, 0);
-      ctx.restore();
+    const image = imageMap.get(node.id);
+    if (image) {
+      ctx.drawImage(
+        image,
+        nodeX - IMAGE_SIZE / 2,
+        nodeY - IMAGE_SIZE / 2,
+        IMAGE_SIZE,
+        IMAGE_SIZE
+      );
     } else {
       ctx.fillText(label, nodeX, nodeY);
     }
   };
+
   return (
     <div>
       <ForceGraph
@@ -134,12 +182,10 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
         dagLevelDistance={300}
         backgroundColor="#101020"
         autoPauseRedraw={false}
-        d3AlphaDecay={0.08} // Speed up the cooling of the simulation
-        d3VelocityDecay={0.9} // Reduce the impact of the forces
-        cooldownTicks={50} // Number of ticks to run the simulation
+        d3AlphaDecay={0.08}
+        d3VelocityDecay={0.9}
+        cooldownTicks={50}
         onEngineStop={() => ref.current?.zoomToFit(400, 100)}
-        /////////////
-        ////// links //////////
         linkColor={() => "rgba(255,255,255,0.2)"}
         linkLabel={(link) => link.targetNode.path} // onLinkHover, this label will be appeared
         linkDirectionalParticles={6} // how many dots should be there in the link
@@ -177,6 +223,7 @@ const DagGraph2D: React.FC<AppCompProps> = () => {
           <InspectComponent node={contextMenu.node} />
         </div>
       )}
+      {/* <img alt="sa" src="assets/setting.webp" height={200} width={200} /> */}
     </div>
   );
 };

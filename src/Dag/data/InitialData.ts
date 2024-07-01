@@ -14,6 +14,7 @@ export const initialNode: DagGraphNodeType = {
   NodeColor: "",
   Links: [],
   Neighbors: [],
+  icon: "",
 };
 
 export const initialLink: DagGraphLinkType = {

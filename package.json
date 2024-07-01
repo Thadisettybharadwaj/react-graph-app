@@ -26,6 +26,7 @@
     "@dynatrace-sdk/navigation": "^1.0.2",
     "@dynatrace-sdk/react-hooks": "~0.4.3",
     "@dynatrace-sdk/user-preferences": "^1.1.1",
+    "@dynatrace/barista-icons": "^7.28.0",
     "@dynatrace/strato-components": "~0.84.11",
     "@dynatrace/strato-components-preview": "~0.114.1",
     "@dynatrace/strato-icons": "~0.37.0",
@@ -33,6 +34,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-force-graph-2d": "^1.25.5",
+    "react-helmet": "^6.1.0",
     "react-intl": "6.6.2",
     "react-router-dom": "^6.22.2"
   },
